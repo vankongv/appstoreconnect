@@ -26,5 +26,4 @@ jobs:
         --header 'Authorization: Bearer ${BEARER_TOKEN}' |
         jq '.' | \
         jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
-    - name: localizations
       
