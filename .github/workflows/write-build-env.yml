@@ -23,7 +23,7 @@ jobs:
     - name: builds
       run: |
         curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
-        --header 'Authorization: Bearer ${BEARER_TOKEN}' |
+        --header 'Authorization: Bearer $BEARER_TOKEN' |
         jq '.' | \
         jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
       
