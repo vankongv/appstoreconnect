@@ -1,11 +1,25 @@
 name: Workflow to write build env on testflight build
 on: workflow_dispatch
 
+#ToDo: 
+#Generate JWT token
+#List builds
+#Find build with matching version number
+#Get en-AU localization of build
+#Patch localization
+# version number to test: 1660739776
+#        echo ${ALLBUILDS}
 jobs:
   list_builds:
     runs-on: ubuntu-latest
+    outputs: 
+      buildID: ${{steps.builds.output}}
     steps:
-    - name: curl
+    - name: builds
       run: |
         curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
-        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzE3ODEsImV4cCI6MTY2MDg3Mjk4MSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.MGl80NqwaBGxPsz38TnpWTPxpdLz2N3JpjYjSoLfSynOrdw9yQ-dYDJB5HJDMrzGe9JDJZd2_VeKgQhrpSp-hg'
+        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzM2NzAsImV4cCI6MTY2MDg3NDc1MCwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.eW8cof-FyA9G5XNglFKIfP8JfX7SdMlIJiproQn1K7yho8IwvzgAAASuC7AOKjfy-490UasTP6y0Wn_cYPYfhw' |
+        jq '.' | \
+        jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
+    - name: localizations
+      
