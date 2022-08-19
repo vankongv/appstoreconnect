@@ -1,3 +1,9 @@
+// Unix timestamp in milliseconds
+const currentTime = Date.now(); 
+console.log( currentTime );
+const timeInTenMinutes = now + 600000;
+console.log( timeInTenMinutes );
+
 const HMACSHA256 = (stringToSign, secret) => "not_implemented"
 
 // The header typically consists of two parts: 
@@ -17,14 +23,13 @@ const encodedHeaders = btoa(JSON.stringify(header))
 // registered, public, and private claims.
 const payload = {    
     "iss": "69a6de91-2a8d-47e3-e053-5b8c7c11a4d1",
-    "iat": 1660876549,
-    "exp": 1660877749,
+    "iat": currentTime,
+    "exp": timeInTenMinutes,
     "aud": "appstoreconnect-v1"
 }
 const encodedPlayload = btoa(JSON.stringify(payload))
 
-const privateKey = "asdfadsf"
-
+const privateKey = process.env.ASC_KEY
 
 // create the signature part you have to take the encoded header, 
 // the encoded payload, a secret, the algorithm specified in the header, 
