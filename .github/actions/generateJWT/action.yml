@@ -1,0 +1,8 @@
+name: 'Generate JWT'
+description: 'Creates JSON Web Token'
+outputs:
+  token:
+    description: 'The Authorization Bearer token'
+runs:
+  using: 'node16'
+  main: 'generateJWT.js'
