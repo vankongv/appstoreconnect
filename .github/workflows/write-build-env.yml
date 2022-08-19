@@ -1,10 +1,10 @@
 name: Workflow to write build env on testflight build
 
 secrets:
-  npm_token:
-    required: true
-    description: token used to publish packages
-
+  auth_token:
+    required: false
+    description: token required for API
+    
 jobs:
   runs-on: ubuntu-latest
   steps:
