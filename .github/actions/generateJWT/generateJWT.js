@@ -1,7 +1,7 @@
-// Unix timestamp in milliseconds
-const currentTime = Date.now(); 
+// Unix timestamp in seconds
+const currentTime = parseInt(Date.now()/1000); 
 console.log( currentTime );
-const timeInTenMinutes = now + 600000;
+const timeInTenMinutes = parseInt(currentTime + 600);
 console.log( timeInTenMinutes );
 
 const HMACSHA256 = (stringToSign, secret) => "not_implemented"
