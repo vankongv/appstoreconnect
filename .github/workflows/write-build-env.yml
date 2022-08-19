@@ -9,6 +9,11 @@ on: workflow_dispatch
 #Patch localization
 # version number to test: 1660739776
 #        echo ${ALLBUILDS}
+
+env:
+  BEARER_TOKEN: eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzQzODUsImV4cCI6MTY2MDg3NTU4NSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.05pAqqCMu3pKIe0nflmf3dd6uTyw9SoQMHSP65x8yhwnk1H39dKHZhs4SC9nnm52tF9OhxSCta9st4GO5lGPqg
+  VERSION_NUMBER: 1660739776
+
 jobs:
   list_builds:
     runs-on: ubuntu-latest
@@ -18,7 +23,7 @@ jobs:
     - name: builds
       run: |
         curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
-        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzM2NzAsImV4cCI6MTY2MDg3NDc1MCwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.eW8cof-FyA9G5XNglFKIfP8JfX7SdMlIJiproQn1K7yho8IwvzgAAASuC7AOKjfy-490UasTP6y0Wn_cYPYfhw' |
+        --header 'Authorization: Bearer ${BEARER_TOKEN}' |
         jq '.' | \
         jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
     - name: localizations
