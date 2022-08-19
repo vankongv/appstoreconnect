@@ -1,10 +1,6 @@
 name: Workflow to write build env on testflight build
+on: workflow_dispatch
 
-secrets:
-  auth_token:
-    required: false
-    description: token required for API
-    
 jobs:
   runs-on: ubuntu-latest
   steps:
