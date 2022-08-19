@@ -2,9 +2,10 @@ name: Workflow to write build env on testflight build
 on: workflow_dispatch
 
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-  - name: curl
-    run: |
-      curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \ 
-      --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzA3NzEsImV4cCI6MTY2MDg3MTc1NSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.Wz7D9RdTy1S2d64M-8hINtCZenbUIZDfCKaQDWdqo3ORkLaZ7CYGMrEGaJZsGnjqHdaGDRsGtWUR6tnbmBcDmA'
+  list_builds:
+    runs-on: ubuntu-latest
+    steps:
+    - name: curl
+      run: |
+        curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \ 
+        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzA3NzEsImV4cCI6MTY2MDg3MTc1NSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.Wz7D9RdTy1S2d64M-8hINtCZenbUIZDfCKaQDWdqo3ORkLaZ7CYGMrEGaJZsGnjqHdaGDRsGtWUR6tnbmBcDmA'
