@@ -1,4 +1,4 @@
-name: Workflow to write build env on testflight build
+name: Write ENV on Testflight Build
 on: workflow_dispatch
 
 #ToDo: 
@@ -11,7 +11,7 @@ on: workflow_dispatch
 #        echo ${ALLBUILDS}
 
 env:
-  BEARER_TOKEN: eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzQzODUsImV4cCI6MTY2MDg3NTU4NSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.05pAqqCMu3pKIe0nflmf3dd6uTyw9SoQMHSP65x8yhwnk1H39dKHZhs4SC9nnm52tF9OhxSCta9st4GO5lGPqg
+  BEARER_TOKEN: eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4NzY1NDksImV4cCI6MTY2MDg3Nzc0OSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.-679oZ7JukjYbNCtPWjTgb26XPWiVJItbmntapGKpDfW31F2iJTRf4qaQ9inFRWwc_B4sI3OmGdhK15EoGXQ-w
   VERSION_NUMBER: 1660739776
 
 jobs:
@@ -23,7 +23,9 @@ jobs:
     - name: builds
       run: |
         curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
-        --header 'Authorization: Bearer $BEARER_TOKEN' |
+        --header "Authorization: Bearer $token" |
         jq '.' | \
         jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
+      env:
+        token: ${{ env.BEARER_TOKEN}}
       
