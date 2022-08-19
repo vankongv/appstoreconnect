@@ -7,24 +7,52 @@ on: workflow_dispatch
 #Find build with matching version number
 #Get en-AU localization of build
 #Patch localization
+# build number to test: 5167ab21-a93d-412e-b978-9561893ffbd8
 # version number to test: 1660739776
 #        echo ${ALLBUILDS}
+
+#need to correct flow of passing JWT and fix JWT generation
 
 env:
   BEARER_TOKEN: eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4OTI5MDgsImV4cCI6MTY2MDg5MzUwOCwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.OSCS3uKsKUiM8uFqqruOmMjzYsPMnQWLxtW2MVey4Dzr9fTovjFfL25OWZGVaBQ3zX3dYZRSOB_BdAnFB0cwfQ
   VERSION_NUMBER: 1660739776
 
 jobs:
-  list_builds:
+  # release:
+  #   uses: ./.github/actions/generateJWT/action.yml
+  #   secrets:         
+  #     token: ${{ env.BEARER_TOKEN}}
+  get_build:
     runs-on: ubuntu-latest
     outputs: 
-      buildID: ${{steps.builds.output}}
+      buildID: ${{steps.builds.output}} 
     steps:
     - name: builds
       run: |
-        curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
-        --header "Authorization: Bearer $token" |
+        resultBuild=$(curl --location --request GET 'https://api.appstoreconnect.apple.com/v1/builds' \
+        --header "Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4OTQ4MjEsImV4cCI6MTY2MDg5NjAyMSwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.XaXUVeQlxkTkdwwhk5K5PfAC1xnObdzKTvNDsx7DR5hHcfjQQ5437R3bgMTU8xboFKut45fzFd6rT5eJnlnvZQ" |
         jq '.' | \
-        jq -r '.data[] | select(.attributes.version=="1660625959") | .id'
-      env:
-        token: ${{ env.BEARER_TOKEN}}
+        jq -r '.data[] | select(.attributes.version=="1660625959") | .id')
+        echo ${resultBuild}
+        echo "::set-output name=buildID::${resultBuild}"
+  get_localization:
+    runs-on: ubuntu-latest
+    outputs: 
+      localizationID: ${{steps.localizations.output}} 
+    steps:
+    - name: localizations
+      env: #need to change build to var
+        build: 5167ab21-a93d-412e-b978-9561893ffbd8
+      run: |
+        resultLocalization=(curl --location -g --request GET 'https://api.appstoreconnect.apple.com/v1/betaBuildLocalizations?filter[build]=${build}' \
+        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4OTUzMjYsImV4cCI6MTY2MDg5NjUyNiwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.nbpy4oKyWUgGWf8dD6y_ub3e654uPWJAKe6_SHZ_LPgkw2i_4aN7u1_7342UEJ3wkrkox7o0EmHjZ6W_SC9Pug' |
+        jq '.' | \
+        jq -r '.data[] | select(.attributes.locale=="en-AU") | .id')
+        echo ${resultLocalization}
+        echo "::set-output name=localizationID::${resultLocalization}"
+
+
+
+
+
+
