@@ -1,4 +1,4 @@
-name: Write ENV on Testflight Build
+name: Write Env on Testflight Build
 on: workflow_dispatch
 
 #ToDo: 
