@@ -16,12 +16,17 @@ on: workflow_dispatch
 env:
   BEARER_TOKEN: eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4OTI5MDgsImV4cCI6MTY2MDg5MzUwOCwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.OSCS3uKsKUiM8uFqqruOmMjzYsPMnQWLxtW2MVey4Dzr9fTovjFfL25OWZGVaBQ3zX3dYZRSOB_BdAnFB0cwfQ
   VERSION_NUMBER: 1660739776
+  env: ${{ secrets.ASC_KEY }}
 
 jobs:
   # release:
   #   uses: ./.github/actions/generateJWT/action.yml
   #   secrets:         
   #     token: ${{ env.BEARER_TOKEN}}
+  generate_JWT:
+    uses: ./.github/actions/generateJWT/generateJWT.yml
+    secrets:
+      ASC_KEY: ${{secrets.ASC_KEY}}
   get_build:
     runs-on: ubuntu-latest
     outputs: 
@@ -50,7 +55,7 @@ jobs:
         jq -r '.data[] | select(.attributes.locale=="en-AU") | .id')
         echo ${resultLocalization}
         echo "::set-output name=localizationID::${resultLocalization}"
-  patch_localizatoin:
+  patch_localization:
     runs-on: ubuntu-latest
     steps:
     - name: write env
