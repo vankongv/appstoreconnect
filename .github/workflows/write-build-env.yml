@@ -44,12 +44,29 @@ jobs:
       env: #need to change build to var
         build: 5167ab21-a93d-412e-b978-9561893ffbd8
       run: |
-        resultLocalization=(curl --location -g --request GET 'https://api.appstoreconnect.apple.com/v1/betaBuildLocalizations?filter[build]=${build}' \
-        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjA4OTUzMjYsImV4cCI6MTY2MDg5NjUyNiwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.nbpy4oKyWUgGWf8dD6y_ub3e654uPWJAKe6_SHZ_LPgkw2i_4aN7u1_7342UEJ3wkrkox7o0EmHjZ6W_SC9Pug' |
+        resultLocalization=(curl --location -g --request GET 'https://api.appstoreconnect.apple.com/v1/betaBuildLocalizations?filter[build]=5167ab21-a93d-412e-b978-9561893ffbd8' \
+        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjEyMTU5MDgsImV4cCI6MTY2MTIxNjc0OCwiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.dG-GUq6Q1mXtEWpqb8EgenU7pp3pB0gmjrIv83V3PsIuuHxtpWPGHCjawwGc2TMnm_ou4GwNTsluye3egUrq_g' |
         jq '.' | \
         jq -r '.data[] | select(.attributes.locale=="en-AU") | .id')
         echo ${resultLocalization}
         echo "::set-output name=localizationID::${resultLocalization}"
+  patch_localizatoin:
+    runs-on: ubuntu-latest
+    steps:
+    - name: write env
+      run: |
+        curl --location --request PATCH 'https://api.appstoreconnect.apple.com/v1/betaBuildLocalizations/5f67893a-9d9f-4ac1-8641-7e3d7994844c' \
+        --header 'Authorization: Bearer eyJhbGciOiJFUzI1NiIsImtpZCI6IlMyN0MyOEoyNTciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiI2OWE2ZGU5MS0yYThkLTQ3ZTMtZTA1My01YjhjN2MxMWE0ZDEiLCJpYXQiOjE2NjEyMTcyNDcsImV4cCI6MTY2MTIxODQ0NywiYXVkIjoiYXBwc3RvcmVjb25uZWN0LXYxIn0.g_naPu4lIBiWYoXdyJPG3QDrEIBGnCRHRG4_2TJot6cMSIY0sv2WiFJ2gYzd0P7YOibuwtrOHwOtv6ZFSbLBvg' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "data": {
+                "attributes": {
+                    "whatsNew": "Hello World"
+                },
+                "id": "5f67893a-9d9f-4ac1-8641-7e3d7994844c",
+                "type": "betaBuildLocalizations"
+            }
+        }'
 
 
 
